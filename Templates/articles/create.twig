@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Article</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('content');
+    </script>
+</head>
+<body class="bg-gray-200 text-gray-900">
+<nav class="bg-gray-800 p-4">
+    <a href="/articles" class="text-gray-200 font-bold hover:bg-gray-700 px-3 py-2 rounded">Articles</a>
+</nav>
+<div class="container mx-auto mt-8">
+    <h1 class="text-3xl font-bold mb-4">Create Article</h1>
+    <form action="/articles" method="POST" class="bg-gray-100 p-4 shadow rounded">
+        <label for="title" class="block mt-2 font-semibold">Title</label>
+        <input type="text" name="title" id="title"
+               class="w-full p-2 border border-gray-300 rounded bg-gray-200 text-gray-900" required>
+        <label for="content" class="block mt-2 font-semibold">Content</label>
+        <textarea name="content" id="content" rows="10"
+                  class="w-full p-2 border border-gray-300 rounded bg-gray-200 text-gray-900" required></textarea>
+        <button type="submit" class="bg-blue-500 text-white p-2 mt-4 rounded hover:bg-blue-600">Create</button>
+    </form>
+    <a href="/articles" class="text-blue-500 hover:text-blue-700 mt-4 block">Back to Articles</a>
+</div>
+</body>
+</html>
