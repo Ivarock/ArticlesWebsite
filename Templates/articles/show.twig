@@ -4,8 +4,13 @@
     <title>{{ article.title }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .bg-burgundy-500 { background-color: #800020; }
-        .hover\:bg-burgundy-600:hover { background-color: #660018; }
+        .bg-burgundy-500 {
+            background-color: #800020;
+        }
+
+        .hover\:bg-burgundy-600:hover {
+            background-color: #660018;
+        }
     </style>
     <script>
         function confirmDelete() {
@@ -21,12 +26,14 @@
     <h1 class="text-3xl font-bold text-blue-500">{{ article.title }}</h1>
     <p class="text-sm text-gray-700">Added on {{ article.getCreatedAt().format('jS F, Y H:i') }}</p>
     <div class="p-4 bg-gray-100 shadow rounded">
-        <div class="whitespace-break-spaces">{{ article.content|raw }}</divwhitespace-break-spaces>
+        <div class="whitespace-break-spaces">{{ article.content }}</div>
     </div>
     <div class="mt-4 flex space-x-2">
         <a href="/articles/{{ article.id }}/edit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</a>
-        <form action="/articles/{{ article.id }}/delete" method="POST" class="inline" onsubmit="return confirmDelete();">
-            <button type="submit" class="bg-burgundy-500 text-white px-4 py-2 rounded hover:bg-burgundy-600">Delete</button>
+        <form action="/articles/{{ article.id }}" method="POST" class="inline" onsubmit="return confirmDelete();">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" class="bg-burgundy-500 text-white px-4 py-2 rounded hover:bg-burgundy-600">Delete
+            </button>
         </form>
     </div>
     <div class="mt-4">

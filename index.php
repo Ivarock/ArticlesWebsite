@@ -10,7 +10,10 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
 use GuzzleHttp\Psr7\Utils;
 
-Database::getConnection();
+try {
+    Database::getConnection();
+} catch (\Doctrine\DBAL\Exception $e) {
+}
 
 $containerBuilder = new ContainerBuilder();
 $containerBuilder->addDefinitions(__DIR__ . '/app/Container.php');
