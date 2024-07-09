@@ -6,6 +6,9 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Log\LoggerInterface;
 use ArticlesWebsite\Services\TemplateRenderer;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class HomeController
 {
@@ -18,6 +21,11 @@ class HomeController
         $this->renderer = $renderer;
     }
 
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
     public function index(Request $request, Response $response): Response
     {
         $this->logger->info('Home page accessed');

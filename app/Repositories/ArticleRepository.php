@@ -81,6 +81,9 @@ class ArticleRepository implements ArticleRepositoryInterface
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function delete(int $id): void
     {
         $this->connection->delete('articles', ['id' => $id]);

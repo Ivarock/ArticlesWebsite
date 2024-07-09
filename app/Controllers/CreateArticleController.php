@@ -8,6 +8,9 @@ use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use ArticlesWebsite\Services\TemplateRenderer;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class CreateArticleController
 {
@@ -28,7 +31,10 @@ class CreateArticleController
     public function create(Request $request, Response $response, array $args): Response
     {
         if ($request->getMethod() === 'GET') {
-            return $this->renderer->render($response, 'articles/create.twig');
+            try {
+                return $this->renderer->render($response, 'articles/create.twig');
+            } catch (LoaderError|RuntimeError|SyntaxError $e) {
+            }
         }
 
         $data = $request->getParsedBody();

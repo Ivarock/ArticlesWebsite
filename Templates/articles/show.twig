@@ -4,17 +4,16 @@
     <title>{{ article.title }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .bg-burgundy-500 {
-            background-color: #800020;
-        }
-
-        .hover\:bg-burgundy-600:hover {
-            background-color: #660018;
-        }
+        .bg-burgundy-500 { background-color: #800020; }
+        .hover\:bg-burgundy-600:hover { background-color: #660018; }
+        .formatted-content { white-space: break-spaces; }
     </style>
     <script>
         function confirmDelete() {
             return confirm('Are you sure you want to delete this article?');
+        }
+        function confirmDeleteComment() {
+            return confirm('Are you sure you want to delete this comment?');
         }
     </script>
 </head>
@@ -26,19 +25,43 @@
     <h1 class="text-3xl font-bold text-blue-500">{{ article.title }}</h1>
     <p class="text-sm text-gray-700">Added on {{ article.getCreatedAt().format('jS F, Y H:i') }}</p>
     <div class="p-4 bg-gray-100 shadow rounded">
-        <div class="whitespace-break-spaces">{{ article.content }}</div>
+        <div class="formatted-content">{{ article.content|raw }}</div>
     </div>
     <div class="mt-4 flex space-x-2">
-        <a href="/articles/{{ article.id }}/edit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</a>
-        <form action="/articles/{{ article.id }}" method="POST" class="inline" onsubmit="return confirmDelete();">
-            <input type="hidden" name="_method" value="DELETE">
-            <button type="submit" class="bg-burgundy-500 text-white px-4 py-2 rounded hover:bg-burgundy-600">Delete
-            </button>
+        <form action="/articles/{{ article.id }}/like" method="POST">
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Like ({{ articleLikes }})</button>
+        </form>
+        <a href="/articles/{{ article.id }}/edit" class="text-blue-500 hover:text-blue-700 px-4 py-2 rounded bg-gray-200">Edit</a>
+        <form action="/articles/{{ article.id }}/delete" method="POST" onsubmit="return confirmDelete();">
+            <button type="submit" class="text-red-500 hover:text-red-700 px-4 py-2 rounded bg-gray-200">Delete</button>
         </form>
     </div>
-    <div class="mt-4">
-        <a href="/articles" class="text-blue-500 hover:text-blue-700">Back to Articles</a>
-    </div>
+
+    <h2 class="text-2xl font-bold mt-8">Comments</h2>
+    <form action="/articles/{{ article.id }}/comments" method="POST" class="bg-gray-100 p-4 shadow rounded mt-4">
+        <label for="author" class="block mt-2 font-semibold">Author</label>
+        <input type="text" name="author" id="author" class="w-full p-2 border border-gray-300 rounded bg-gray-200 text-gray-900" required>
+        <label for="content" class="block mt-2 font-semibold">Content</label>
+        <textarea name="content" id="content" class="w-full p-2 border border-gray-300 rounded bg-gray-200 text-gray-900" required></textarea>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4">Add Comment</button>
+    </form>
+
+    <ul class="mt-4">
+        {% for comment in comments %}
+            <li class="mb-4 p-4 bg-gray-100 shadow rounded">
+                <p class="text-sm text-gray-600">{{ comment.author }} on {{ comment.getCreatedAt().format('jS F, Y H:i') }}</p>
+                <div class="formatted-content">{{ comment.content|raw }}</div>
+                <div class="mt-2 flex space-x-2">
+                    <form action="/articles/{{ article.id }}/comments/{{ comment.id }}/like" method="POST">
+                        <button type="submit" class="text-blue-500 hover:text-blue-700 ml-2">Like ({{ comment.likes }})</button>
+                    </form>
+                    <form action="/articles/{{ article.id }}/comments/{{ comment.id }}/delete" method="POST" class="inline" onsubmit="return confirmDeleteComment();">
+                        <button type="submit" class="text-red-500 hover:text-red-700 ml-2">Delete</button>
+                    </form>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
 </div>
 </body>
 </html>

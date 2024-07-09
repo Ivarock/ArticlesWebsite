@@ -28,6 +28,9 @@ class EditArticleController
         $this->renderer = $renderer;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function edit(Request $request, Response $response, array $args): Response
     {
         $id = (int)$args['id'];
@@ -41,7 +44,7 @@ class EditArticleController
         $title = $data['title'] ?? '';
         $content = $data['content'] ?? '';
 
-        $article = $this->editService->edit($id, $title, $content);
+        $this->editService->edit($id, $title, $content);
         $this->logger->info('Edited article', ['id' => $id]);
 
         return $response->withHeader('Location', '/articles')->withStatus(302);

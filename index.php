@@ -29,7 +29,7 @@ $request = ServerRequest::fromGlobals();
 $response = new Response();
 
 $method = $request->getMethod();
-if ($method === 'POST' && $request->getParsedBody()['_method']) {
+if ($method === 'POST' && isset($request->getParsedBody()['_method'])) {
     $method = strtoupper($request->getParsedBody()['_method']);
     $request = $request->withMethod($method);
 }
@@ -49,9 +49,10 @@ switch ($routeInfo[0]) {
         [$class, $method] = $handler;
         try {
             $controller = $container->get($class);
+            $response = $controller->$method($request, $response, $vars);
         } catch (DependencyException|NotFoundException $e) {
+            $response = $response->withStatus(500)->withBody(Utils::streamFor('Internal Server Error'));
         }
-        $response = $controller->$method($request, $response, $vars);
         break;
 }
 
